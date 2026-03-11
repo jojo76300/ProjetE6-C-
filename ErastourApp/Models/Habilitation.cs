@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using SQLite;
 
-namespace ErastourApp.Models
+namespace ErastourApp.Models;
+
+public class Habilitation
 {
-    public class Habilitation
-    {
-        [PrimaryKey, AutoIncrement] public int Hab_Id { get; set; }
-        public string? Hab_Libelle { get; set; }
-    }
+    [PrimaryKey, AutoIncrement] public int Hab_Id { get; set; }
+    public string? Hab_Libelle { get; set; }
 }
