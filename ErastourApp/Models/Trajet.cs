@@ -16,5 +16,5 @@ public class Trajet
     public DateTime? Tra_date_arrive { get; set; }
     public int? Tra_ordre { get; set; }
     public string? Tra_prix { get; set; }
-    public bool? Tra_status { get; set; }
+    public bool? Tra_statut { get; set; }
 }
