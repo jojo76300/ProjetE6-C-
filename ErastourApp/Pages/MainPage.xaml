@@ -1,0 +1,66 @@
+﻿<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ErastourApp.MainPage"
+    BackgroundColor="#1E40AF">
+
+    <Grid RowDefinitions="*,Auto">
+
+        <!-- Contenu principal -->
+        <VerticalStackLayout
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Spacing="20">
+
+            <!-- Icône -->
+            <Frame
+                WidthRequest="100"
+                HeightRequest="100"
+                CornerRadius="50"
+                BackgroundColor="#E5E7EB"
+                HasShadow="False"
+                Padding="20">
+
+                <Image
+                    Source="train.png"
+                    Aspect="AspectFit" />
+            </Frame>
+
+            <!-- Titre -->
+            <Label
+                Text="Erastour"
+                FontSize="36"
+                FontAttributes="Bold"
+                TextColor="White"
+                HorizontalTextAlignment="Center" />
+
+            <!-- Sous-titre -->
+            <Label
+                Text="Gestion de Transports"
+                FontSize="16"
+                TextColor="#D1D5DB"
+                HorizontalTextAlignment="Center" />
+
+            <!-- Bouton -->
+            <Button
+                Text="Accéder à l'application"
+                Command="{Binding GoToAppCommand}"
+                BackgroundColor="White"
+                TextColor="#1E40AF"
+                CornerRadius="25"
+                Padding="20,10"
+                WidthRequest="250" />
+
+        </VerticalStackLayout>
+
+        <!-- Pieds -->
+        <Label
+            Grid.Row="1"
+            Text="© 2026 Projet 2SIO .NET"
+            FontSize="12"
+            TextColor="#D1D5DB"
+            HorizontalOptions="Center"
+            Margin="0,0,0,20" />
+
+    </Grid>
+</ContentPage>
