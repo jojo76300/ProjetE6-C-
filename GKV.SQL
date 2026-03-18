@@ -4,24 +4,25 @@
                         SQL Server 2005
                        (4/3/2026 16:02:27)
  ----------------------------------------------------------------------------
-     Nom de la base : MLR4
+     Nom de la base : Erastour
      Projet : Espace de travail
      Auteur : Enzo VINCENT
      Date de dernière modification : 4/3/2026 16:02:19
  ----------------------------------------------------------------------------
 */
 
-drop database MLR4
-go
+IF EXISTS (SELECT * FROM sys.databases WHERE name = 'Erastour')
+      DROP DATABASE Erastour
+GO
 
 /* -----------------------------------------------------------------------------
-      OUVERTURE DE LA BASE MLR4
+      OUVERTURE DE LA BASE Erastour
 ----------------------------------------------------------------------------- */
 
-create database MLR4
+create database Erastour
 go
 
-use MLR4
+use Erastour
 go
 
 
