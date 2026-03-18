@@ -148,16 +148,16 @@
                 <Grid RowDefinitions="Auto,*">
                     <!-- En-têtes du tableau -->
                     <Grid Grid.Row="0" 
-                          ColumnDefinitions="1.5*,1.5*,1.5*,1.5*,1.5*,Auto" 
+                          ColumnDefinitions="1.5*,1.5*,1.5*,1.5*,1.5*,1*" 
                           Padding="20,15"
                           BackgroundColor="#F9F9F9">
 
-                        <Label Grid.Column="0" Text="NOM" FontSize="12" FontAttributes="Bold" TextColor="#919191"/>
-                        <Label Grid.Column="1" Text="PRENOM" FontSize="12" FontAttributes="Bold" TextColor="#919191"/>
-                        <Label Grid.Column="2" Text="LOGIN" FontSize="12" FontAttributes="Bold" TextColor="#919191"/>
-                        <Label Grid.Column="3" Text="EMAIL" FontSize="12" FontAttributes="Bold" TextColor="#919191"/>
-                        <Label Grid.Column="4" Text="TEL" FontSize="12" FontAttributes="Bold" TextColor="#919191"/>
-                        <Label Grid.Column="5" Text="ACTIONS" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="End"/>
+                        <Label Grid.Column="0" Text="NOM" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="PRENOM" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="LOGIN" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="EMAIL" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Label Grid.Column="4" Text="TEL" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Label Grid.Column="5" Text="ACTIONS" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="End" VerticalOptions="Center"/>
                     </Grid>
 
                     <BoxView Grid.Row="0" HeightRequest="1" Color="#E1E1E1" VerticalOptions="End"/>
@@ -167,15 +167,15 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Utilisateur">
                                 <Grid>
-                                    <Grid ColumnDefinitions="1.5*,1.5*,1.5*,1.5*,1.5*,Auto" 
+                                    <Grid ColumnDefinitions="1.5*,1.5*,1.5*,1.5*,1.5*,1*" 
                                           Padding="20,15"
                                           VerticalOptions="Center">
 
-                                        <Label Grid.Column="0" Text="{Binding Util_Nom}" TextColor="#6E6E6E" VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Util_Prenom}" TextColor="#6E6E6E" VerticalOptions="Center"/>
-                                        <Label Grid.Column="2" Text="{Binding Util_Login}" TextColor="#6E6E6E" VerticalOptions="Center"/>
-                                        <Label Grid.Column="3" Text="{Binding Util_Email}" TextColor="#6E6E6E" VerticalOptions="Center"/>
-                                        <Label Grid.Column="4" Text="{Binding Util_Tel}" TextColor="#6E6E6E" VerticalOptions="Center"/>
+                                        <Label Grid.Column="0" Text="{Binding Util_Nom}" TextColor="#6E6E6E" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                        <Label Grid.Column="1" Text="{Binding Util_Prenom}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" Text="{Binding Util_Login}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Grid.Column="3" Text="{Binding Util_Email}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Grid.Column="4" Text="{Binding Util_Tel}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
 
                                         <HorizontalStackLayout Grid.Column="5" Spacing="15" HorizontalOptions="End" VerticalOptions="Center">
                                             <Button Text="✏️" 
@@ -184,7 +184,8 @@
                                                     Padding="0"
                                                     BackgroundColor="Transparent"
                                                     FontSize="18"
-                                                    />
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:VoyageursViewModel}}, Path=EditVoyageurCommand}"
+                                                    CommandParameter="{Binding .}"/>
 
                                             <Button Text="🗑️" 
                                                     WidthRequest="40" 

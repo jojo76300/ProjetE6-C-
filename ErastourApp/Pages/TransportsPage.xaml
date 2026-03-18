@@ -1,12 +1,207 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:ErastourApp.ViewModels"
+             xmlns:models="clr-namespace:ErastourApp.Models"
              x:Class="ErastourApp.Pages.TransportsPage"
-             Title="TransportsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             x:DataType="viewmodel:TransportsViewModel"
+             Title="Erastour - Espace Gestionnaire"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Header avec logo et user info -->
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" 
+                  ColumnSpacing="15"
+                  Padding="0,10">
+
+                <Border Grid.Column="0" 
+                        BackgroundColor="#7B3FF2"
+                        StrokeThickness="0"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        StrokeShape="RoundRectangle 25">
+                    <Label Text="🚌" 
+                           FontSize="24"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="Erastour" 
+                           FontSize="20" 
+                           FontAttributes="Bold"
+                           TextColor="#212121"/>
+                    <Label Text="Espace Gestionnaire" 
+                           FontSize="12" 
+                           TextColor="#6E6E6E"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="2" 
+                                      Spacing="8" 
+                                      VerticalOptions="Center">
+                    <Label Text="👤" 
+                           FontSize="20"
+                           VerticalOptions="Center"/>
+                    <Label Text="{Binding CurrentUserName}" 
+                           FontSize="14" 
+                           TextColor="#212121"
+                           VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+
+                <Button Grid.Column="3"
+                        Text="🚪 Déconnexion"
+                        Command="{Binding DeconnexionCommand}"
+                        BackgroundColor="#FFF0F0"
+                        TextColor="#DC3545"
+                        FontSize="12"
+                        CornerRadius="8"
+                        Padding="15,8"/>
+            </Grid>
+
+            <!-- Navigation Tabs -->
+            <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" 
+                  ColumnSpacing="30"
+                  Padding="0,10">
+
+                <Button Grid.Column="0" 
+                        Text="Vue d'ensemble"
+                        Command="{Binding NavigateToDashboardCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#6E6E6E"
+                        FontSize="14"
+                        BorderWidth="0"
+                        Padding="0"
+                        CornerRadius="0"/>
+
+                <Button Grid.Column="1" 
+                        Text="👥 Voyageurs"
+                        Command="{Binding NavigateToVoyageursCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#6E6E6E"
+                        FontSize="14"
+                        BorderWidth="0"
+                        Padding="0"
+                        CornerRadius="0"/>
+
+                <Button Grid.Column="2" 
+                        Text="📍 Lieux"
+                        Command="{Binding NavigateToLieuxCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#6E6E6E"
+                        FontSize="14"
+                        BorderWidth="0"
+                        Padding="0"
+                        CornerRadius="0"/>
+
+                <Button Grid.Column="3" 
+                        Text="🚗 Transports"
+                        Command="{Binding NavigateToTransportsCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#6E6E6E"
+                        FontSize="14"
+                        FontAttributes="Bold"
+                        BorderWidth="0"
+                        Padding="0"
+                        CornerRadius="0"/>
+
+                <Button Grid.Column="4" 
+                        Text="🛣️ Trajets"
+                        Command="{Binding NavigateToTrajetsCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="#6E6E6E"
+                        FontSize="14"
+                        BorderWidth="0"
+                        Padding="0"
+                        CornerRadius="0"/>
+            </Grid>
+
+            <BoxView HeightRequest="1" Color="#E1E1E1" Margin="0,-20,0,0" />
+
+            <!-- Barre de titre de la page avec bouton d'ajout -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,20,0,20">
+                <Label Grid.Column="0" 
+                       Text="Gestion des Transports" 
+                       FontSize="28" 
+                       FontAttributes="Bold"
+                       TextColor="#212121"
+                       VerticalOptions="Center"/>
+
+                <Button Grid.Column="1"
+                        Text="+ Ajouter un transport"
+                        Command="{Binding AjouterTransportCommand}"
+                        BackgroundColor="#7B3FF2"
+                        TextColor="White"
+                        CornerRadius="8"
+                        FontAttributes="Bold"
+                        Padding="20,10"/>
+            </Grid>
+
+            <!-- Table/Liste des Transports -->
+            <Border BackgroundColor="White"
+                    StrokeThickness="1"
+                    Stroke="#E1E1E1"
+                    StrokeShape="RoundRectangle 12">
+
+                <Grid RowDefinitions="Auto,*">
+                    <!-- En-têtes du tableau -->
+                    <Grid Grid.Row="0" 
+                          ColumnDefinitions="1.5*,1.5*,1.5*,1*" 
+                          Padding="20,15"
+                          BackgroundColor="#F9F9F9">
+
+                        <Label Grid.Column="0" Text="TYPE" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="NUMERO" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="COMPAGNIE" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="ACTIONS" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="End" VerticalOptions="Center"/>
+                    </Grid>
+
+                    <BoxView Grid.Row="0" HeightRequest="1" Color="#E1E1E1" VerticalOptions="End"/>
+
+                    <!-- Liste des transports (remplaçant le tableau) -->
+                    <CollectionView Grid.Row="1" ItemsSource="{Binding Transports}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Transport">
+                                <Grid>
+                                    <Grid ColumnDefinitions="1.5*,1.5*,1.5*,1*" 
+                                          Padding="20,15"
+                                          VerticalOptions="Center">
+
+                                        <Label Grid.Column="0" Text="{Binding Tran_Type}" TextColor="#6E6E6E" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                        <Label Grid.Column="1" Text="{Binding Tran_Numero}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" Text="{Binding Tran_Compagnie}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                                        <HorizontalStackLayout Grid.Column="3" Spacing="15" HorizontalOptions="End" VerticalOptions="Center">
+                                            <Button Text="✏️" 
+                                                    WidthRequest="40" 
+                                                    HeightRequest="40"
+                                                    Padding="0"
+                                                    BackgroundColor="Transparent"
+                                                    FontSize="18"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TransportsViewModel}}, Path=EditTransportCommand}"
+                                                    CommandParameter="{Binding .}" />
+
+                                            <Button Text="🗑️" 
+                                                    WidthRequest="40" 
+                                                    HeightRequest="40"
+                                                    Padding="0"
+                                                    BackgroundColor="Transparent"
+                                                    FontSize="18"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TransportsViewModel}}, Path=DeleteTransportCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                    <BoxView HeightRequest="1" Color="#E1E1E1" VerticalOptions="End"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

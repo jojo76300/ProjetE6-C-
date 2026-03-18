@@ -7,16 +7,21 @@
     xmlns:pages="clr-namespace:ErastourApp.Pages"
     Title="ErastourApp">
 
-    <!--<ShellContent
+    <ShellContent
         Title="Lieux"
         ContentTemplate="{DataTemplate pages:LieuxPage}"
-        Route="LieuxPage" />-->
+        Route="LieuxPage" />
 
     <ShellContent
-    Title="Voyageurs"
-    ContentTemplate="{DataTemplate pages:VoyageursPage}"
-    Route="VoyageursPage" />
-    
+        Title="Voyageurs"
+        ContentTemplate="{DataTemplate pages:VoyageursPage}"
+        Route="VoyageursPage" />
+
+    <ShellContent
+        Title="Transports"
+        ContentTemplate="{DataTemplate pages:TransportsPage}"
+        Route="TransportsPage" />
+
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
