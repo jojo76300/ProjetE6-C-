@@ -45,6 +45,12 @@ public partial class LieuxViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task NavigateToLieux()
+    {
+        await Shell.Current.GoToAsync("//LieuxPage");
+    }
+
+    [RelayCommand]
     private async Task NavigateToTransports()
     {
         await Shell.Current.GoToAsync("//TransportsPage");

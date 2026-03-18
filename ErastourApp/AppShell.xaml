@@ -13,6 +13,11 @@
         Route="LieuxPage" />
 
     <ShellContent
+    Title="Voyageurs"
+    ContentTemplate="{DataTemplate pages:VoyageursPage}"
+    Route="VoyageursPage" />
+    
+    <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
