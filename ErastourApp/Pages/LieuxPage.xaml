@@ -182,7 +182,8 @@
                                                     Padding="0"
                                                     BackgroundColor="Transparent"
                                                     FontSize="18"
-                                                    Command="..." />
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:LieuxViewModel}}, Path=EditLieuCommand}"
+                                                    CommandParameter="{Binding .}" />
 
                                             <Button Text="🗑️" 
                                                     WidthRequest="40" 
