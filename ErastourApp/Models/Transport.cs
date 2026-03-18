@@ -12,5 +12,5 @@ public class Transport
     [PrimaryKey, AutoIncrement] public int Tran_Id { get; set; }
     public string? Tran_Type { get; set; }
     public string? Tran_Compagnie { get; set; }
-    public int? Tran_numéro { get; set; }
+    public int? Tran_Numero { get; set; }
 }
