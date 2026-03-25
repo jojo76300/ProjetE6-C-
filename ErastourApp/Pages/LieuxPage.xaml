@@ -148,15 +148,17 @@
                 <Grid RowDefinitions="Auto,*">
                     <!-- En-têtes du tableau -->
                     <Grid Grid.Row="0" 
-                          ColumnDefinitions="1.5*,1.5*,1.5*,1.5*,1*" 
+                          ColumnDefinitions="1.5*,1.5*,1.5*,1.5*,1.5*,1.5*,1*" 
                           Padding="20,15"
                           BackgroundColor="#F9F9F9">
 
                         <Label Grid.Column="0" Text="NOM" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Start" VerticalOptions="Center"/>
                         <Label Grid.Column="1" Text="VILLE" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
                         <Label Grid.Column="2" Text="PAYS" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
-                        <Label Grid.Column="3" Text="TYPE" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
-                        <Label Grid.Column="4" Text="ACTIONS" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="CP" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Label Grid.Column="4" Text="ADRESSE" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Label Grid.Column="5" Text="COMMENTAIRE" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Label Grid.Column="6" Text="ACTIONS" FontSize="12" FontAttributes="Bold" TextColor="#919191" HorizontalOptions="End" VerticalOptions="Center"/>
                     </Grid>
 
                     <BoxView Grid.Row="0" HeightRequest="1" Color="#E1E1E1" VerticalOptions="End"/>
@@ -166,16 +168,23 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Lieu">
                                 <Grid>
-                                    <Grid ColumnDefinitions="1.5*,1.5*,1.5*,1.5*,1*" 
+                                    <Grid ColumnDefinitions="1.5*,1.5*,1.5*,1.5*,1.5*,1.5*,1*" 
                                           Padding="20,15"
                                           VerticalOptions="Center">
 
                                         <Label Grid.Column="0" Text="{Binding Lieu_Nom}" FontAttributes="Bold" TextColor="#212121" HorizontalOptions="Start" VerticalOptions="Center"/>
                                         <Label Grid.Column="1" Text="{Binding Lieu_Ville}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
                                         <Label Grid.Column="2" Text="{Binding Lieu_Pays}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                        <Label Grid.Column="3" Text="{Binding Lieu_Commentaire}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Grid.Column="3" Text="{Binding Lieu_CP}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Grid.Column="4" Text="{Binding Lieu_Adresse}" FontAttributes="Bold" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:LieuxViewModel}}, Path=OpenMapCommand}"
+                                                                      CommandParameter="{Binding Lieu_LienMap}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <Label Grid.Column="5" Text="{Binding Lieu_Commentaire}" TextColor="#6E6E6E" HorizontalOptions="Center" VerticalOptions="Center"/>
 
-                                        <HorizontalStackLayout Grid.Column="4" Spacing="15" HorizontalOptions="End" VerticalOptions="Center">
+                                        <HorizontalStackLayout Grid.Column="6" Spacing="15" HorizontalOptions="End" VerticalOptions="Center">
                                             <Button Text="✏️" 
                                                     WidthRequest="40" 
                                                     HeightRequest="40"
