@@ -8,6 +8,16 @@
     Title="ErastourApp">
 
     <ShellContent
+    Title="Home"
+    ContentTemplate="{DataTemplate pages:MainPage}"
+    Route="MainPage" />
+
+    <ShellContent
+    Title="Login"
+    ContentTemplate="{DataTemplate pages:LoginPage}"
+    Route="LoginPage" />
+    
+    <ShellContent
         Title="Lieux"
         ContentTemplate="{DataTemplate pages:LieuxPage}"
         Route="LieuxPage" />
@@ -21,10 +31,5 @@
         Title="Transports"
         ContentTemplate="{DataTemplate pages:TransportsPage}"
         Route="TransportsPage" />
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
 
 </Shell>
