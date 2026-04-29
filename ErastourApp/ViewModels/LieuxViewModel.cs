@@ -2,11 +2,14 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ErastourApp.Models;
+using ErastourApp.Database; // Ajout du using pour DatabaseService
 
 namespace ErastourApp.ViewModels;
 
 public partial class LieuxViewModel : ObservableObject
 {
+    private readonly DatabaseService _databaseService; // Ajout du databaseService
+
     [ObservableProperty]
     private string currentUserName = "admin";
 
@@ -14,16 +17,19 @@ public partial class LieuxViewModel : ObservableObject
 
     public LieuxViewModel()
     {
+        _databaseService = new DatabaseService(); // Initialisation
         LoadLieux();
     }
 
     private void LoadLieux()
     {
-        // Données factices pour l'UI, à remplacer par la DatabaseService une fois remise en place
         Lieux.Clear();
-        Lieux.Add(new Lieu { Lieu_Id = 1, Lieu_Nom = "Charles de Gaulle", Lieu_Ville = "Paris", Lieu_Pays = "France", Lieu_Commentaire = "Aéroport" });
-        Lieux.Add(new Lieu { Lieu_Id = 2, Lieu_Nom = "Gare de Lyon", Lieu_Ville = "Paris", Lieu_Pays = "France", Lieu_Commentaire = "Gare" });
-        Lieux.Add(new Lieu { Lieu_Id = 3, Lieu_Nom = "Saint-Exupéry", Lieu_Ville = "Lyon", Lieu_Pays = "France", Lieu_Commentaire = "Aéroport" });
+        // Appel à la méthode de votre DatabaseService
+        var lieuxFromDb = _databaseService.GetLieux(); 
+        foreach (var lieu in lieuxFromDb)
+        {
+            Lieux.Add(lieu);
+        }
     }
 
     [RelayCommand]
@@ -84,6 +90,23 @@ public partial class LieuxViewModel : ObservableObject
         if (answer)
         {
             Lieux.Remove(lieu);
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenMap(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url)) return;
+
+        try
+        {
+            Uri uri = new Uri(url);
+            await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
+        }
+        catch (Exception ex)
+        {
+            // Gérer les erreurs (lien invalide par ex)
+            await Application.Current.MainPage.DisplayAlert("Erreur", "Impossible d'ouvrir le lien: " + ex.Message, "OK");
         }
     }
 }

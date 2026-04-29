@@ -7,7 +7,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using ErastourApp.Models;
+using ErastourApp.Pages;
 using Microsoft.Data.SqlClient;
+using Microsoft.Maui.Controls;
+using static System.Collections.Specialized.BitVector32;
 
 
 namespace ErastourApp.Database;
@@ -32,7 +35,22 @@ public partial class DatabaseService
         Connexion.Open();
     }
 
-    public List<Lieu> GetLieux()        
+    public bool VerifierConnexionUtilisateur(string username, string password)
+    {
+        string queryString = "VerifierConnexionUtilisateur";
+        SqlCommand command = new SqlCommand(queryString, Connexion);
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@username", username);
+        command.Parameters.AddWithValue("@password", password);
+        var outputParam = new SqlParameter("@isValid", SqlDbType.Bit)
+        {
+            Direction = ParameterDirection.Output
+        };
+        command.Parameters.Add(outputParam);
+        command.ExecuteNonQuery();
+        return (bool)outputParam.Value;
+    }
+    public List<Lieu> GetLieux()
     {
         string queryString = "PS_S_LIEUX";
         SqlCommand command = new SqlCommand(queryString, Connexion);
@@ -51,7 +69,7 @@ public partial class DatabaseService
                     Lieu_CP = (string?)reader["Lieu_CP"],
                     Lieu_Adresse = (string?)reader["Lieu_Adresse"],
                     Lieu_LienMap = (string?)reader["Lieu_LienMap"],
-                    Lieu_Commentaire = (string?)reader["Lieu_Commentaire"] 
+                    Lieu_Commentaire = (string?)reader["Lieu_Commentaire"]
                 });
         }
         return lieux;
