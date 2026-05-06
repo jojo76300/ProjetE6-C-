@@ -10,22 +10,22 @@ public partial class LieuxViewModel : ObservableObject
 {
     private readonly DatabaseService _databaseService; // Ajout du databaseService
 
-    [ObservableProperty]
-    private string currentUserName = "admin";
+    //[ObservableProperty]
+    //private string currentUserName = Session.User.Util_Login;
 
-    public ObservableCollection<Lieu> Lieux { get; set; } = new ObservableCollection<Lieu>();
+    [ObservableProperty]
+    private ObservableCollection<Lieu> _lieux = new ObservableCollection<Lieu>();
 
     public LieuxViewModel()
     {
         _databaseService = new DatabaseService(); // Initialisation
         LoadLieux();
     }
-
     private void LoadLieux()
     {
         Lieux.Clear();
         // Appel à la méthode de votre DatabaseService
-        var lieuxFromDb = _databaseService.GetLieux(); 
+        var lieuxFromDb = _databaseService.GetLieux();
         foreach (var lieu in lieuxFromDb)
         {
             Lieux.Add(lieu);

@@ -35,12 +35,12 @@ public partial class DatabaseService
         Connexion.Open();
     }
 
-    public bool VerifierConnexionUtilisateur(string username, string password)
+    public bool VerifierConnexionUtilisateur(string email, string password)
     {
         string queryString = "VerifierConnexionUtilisateur";
         SqlCommand command = new SqlCommand(queryString, Connexion);
         command.CommandType = System.Data.CommandType.StoredProcedure;
-        command.Parameters.AddWithValue("@username", username);
+        command.Parameters.AddWithValue("@email", email);
         command.Parameters.AddWithValue("@password", password);
         var outputParam = new SqlParameter("@isValid", SqlDbType.Bit)
         {
@@ -49,6 +49,36 @@ public partial class DatabaseService
         command.Parameters.Add(outputParam);
         command.ExecuteNonQuery();
         return (bool)outputParam.Value;
+    }
+
+    public void LoadUserData(string email, string password)
+    {
+        using (var cmd = new SqlCommand("GetUtilisateurParEmailEtMdp", Connexion))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@email", email);
+            cmd.Parameters.AddWithValue("@password", password);
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    Session.User = new Utilisateur
+                    {
+                        Util_Id = reader.GetInt32(0),
+                        Util_Login = reader.GetString(1),
+                        Util_Nom = reader.GetString(2),
+                        Util_Prenom = reader.GetString(3),
+                        Util_Email = reader.GetString(4),
+                        Util_Tel = reader.GetString(5),
+                        Util_estGestionnaire = reader.GetBoolean(6)
+                    };
+
+                    string json = System.Text.Json.JsonSerializer.Serialize(Session.User);
+                    File.WriteAllText(Path.Combine(FileSystem.AppDataDirectory, "utilisateur.json"), json);
+                }
+            }
+        }
     }
     public List<Lieu> GetLieux()
     {
@@ -64,10 +94,10 @@ public partial class DatabaseService
                 {
                     Lieu_Id = (int)reader["Lieu_Id"],
                     Lieu_Nom = (string?)reader["Lieu_Nom"],
-                    Lieu_Ville = (string?)reader["Lieu_Ville"],
-                    Lieu_Pays = (string?)reader["Lieu_Pays"],
-                    Lieu_CP = (string?)reader["Lieu_CP"],
                     Lieu_Adresse = (string?)reader["Lieu_Adresse"],
+                    Lieu_Ville = (string?)reader["Lieu_Ville"],
+                    Lieu_CP = (string?)reader["Lieu_CP"],
+                    Lieu_Pays = (string?)reader["Lieu_Pays"],
                     Lieu_LienMap = (string?)reader["Lieu_LienMap"],
                     Lieu_Commentaire = (string?)reader["Lieu_Commentaire"]
                 });
@@ -133,16 +163,16 @@ public partial class DatabaseService
         };
     }
 
-    public List<Utilisateur> GetUtilisateurs()
+    public List<Utilisateur> GetVoyageurs()
     {
-        string queryString = "PS_S_UTILISATEURS";
+        string queryString = "PS_S_VOYAGEURS";
         SqlCommand command = new SqlCommand(queryString, Connexion);
         command.CommandType = System.Data.CommandType.StoredProcedure;
         SqlDataReader reader = command.ExecuteReader();
-        var utilisateurs = new List<Utilisateur>();
+        var voyageurs = new List<Utilisateur>();
         while (reader.Read())
         {
-            utilisateurs.Add(
+            voyageurs.Add(
                 new Utilisateur
                 {
                     Util_Id = (int)reader["Util_Id"],
@@ -151,11 +181,10 @@ public partial class DatabaseService
                     Util_Login = (string?)reader["Util_Login"],
                     Util_Password = (string?)reader["Util_Password"],
                     Util_Tel = (string?)reader["Util_Tel"],
-                    Util_Email = (string?)reader["Util_Email"],
-                    Util_estGestionnaire = (bool?)reader["Util_estGestionnaire"]
+                    Util_Email = (string?)reader["Util_Email"]
                 });
         }
-        return utilisateurs;
+        return voyageurs;
     }
 
     public Utilisateur GetUtilisateur(int id)

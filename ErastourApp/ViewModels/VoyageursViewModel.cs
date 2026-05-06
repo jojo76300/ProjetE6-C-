@@ -1,12 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ErastourApp.Database;
 using ErastourApp.Models;
 
 namespace ErastourApp.ViewModels;
 
 public partial class VoyageursViewModel : ObservableObject
 {
+    private readonly DatabaseService _databaseService;
+
     [ObservableProperty]
     private string currentUserName = "admin";
 
@@ -14,16 +17,19 @@ public partial class VoyageursViewModel : ObservableObject
 
     public VoyageursViewModel()
     {
+        _databaseService = new DatabaseService(); // Initialisation
         LoadVoyageurs();
     }
 
     private void LoadVoyageurs()
     {
-        // Données factices pour l'UI, à remplacer par la DatabaseService une fois remise en place
         Voyageurs.Clear();
-        Voyageurs.Add(new Utilisateur { Util_Id = 1, Util_Nom = "Dupont", Util_Prenom = "Pierre", Util_Login = "Pierre.Dupont", Util_Email = "pierre.dupont@campus-la-chataigneraie.org", Util_Tel = "+33 6 54 25 67 95" });
-        Voyageurs.Add(new Utilisateur { Util_Id = 2, Util_Nom = "Fontaine", Util_Prenom = "Clara", Util_Login = "Clara.Fontaine", Util_Email = "clara.fontaine@campus-la-chataigneraie.org", Util_Tel = "+33 7 32 95 21 02" });
-        Voyageurs.Add(new Utilisateur { Util_Id = 3, Util_Nom = "Szylobryt", Util_Prenom = "Stanislas", Util_Login = "Stanislas.Szylobryt", Util_Email = "stanislas.szylobryt@campus-la-chataigneraie.org", Util_Tel = "+33 6 29 67 30 54" });
+        // Appel à la méthode de votre DatabaseService
+        var voyageursFromDb = _databaseService.GetVoyageurs();
+        foreach (var voyageur in voyageursFromDb)
+        {
+            Voyageurs.Add(voyageur);
+        }
     }
 
     [RelayCommand]

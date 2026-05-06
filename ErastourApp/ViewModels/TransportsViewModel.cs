@@ -1,12 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ErastourApp.Database;
 using ErastourApp.Models;
 
 namespace ErastourApp.ViewModels;
 
 public partial class TransportsViewModel : ObservableObject
 {
+    private readonly DatabaseService _databaseService; // Ajout du databaseService
+
     [ObservableProperty]
     private string currentUserName = "admin";
 
@@ -14,16 +17,19 @@ public partial class TransportsViewModel : ObservableObject
 
     public TransportsViewModel()
     {
+        _databaseService = new DatabaseService(); // Initialisation
         LoadTransports();
     }
 
     private void LoadTransports()
     {
-        // Données factices pour l'UI, à remplacer par la DatabaseService une fois remise en place
         Transports.Clear();
-        Transports.Add(new Transport { Tran_Id = 1, Tran_Type = "Bus", Tran_Numero = "67", Tran_Compagnie = "Nomad" });
-        Transports.Add(new Transport {Tran_Id = 2, Tran_Type = "Avion", Tran_Numero = "45B731", Tran_Compagnie = "AirFrance" });
-        Transports.Add(new Transport {Tran_Id = 3, Tran_Type = "Vélo", Tran_Numero = "5", Tran_Compagnie = "Vélib" });
+        // Appel à la méthode de votre DatabaseService
+        var transportsFromDb = _databaseService.GetTransports();
+        foreach (var transport in transportsFromDb)
+        {
+            Transports.Add(transport);
+        }
     }
 
     [RelayCommand]

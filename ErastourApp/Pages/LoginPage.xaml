@@ -17,8 +17,8 @@
                 HorizontalTextAlignment="Center" />
 
             <Entry
-                Placeholder="Login"
-                Text="{Binding Login}" />
+                Placeholder="Email"
+                Text="{Binding Email}" />
 
             <Entry
                 Placeholder="Mot de passe"

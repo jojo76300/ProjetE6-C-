@@ -17,7 +17,7 @@ namespace ErastourApp.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
 {
-    public string Login { get; set; }
+    public string Email { get; set; }
     public string Password { get; set; }
 
     public ICommand LoginCommand { get; }
@@ -33,15 +33,16 @@ public partial class LoginViewModel : ObservableObject
 
     private async void OnLogin()
     {
-        if (string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password))
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
             await Shell.Current.DisplayAlert("Erreur", "Veuillez remplir tous les champs.", "OK");
             return;
         }
         try
         {
-            if (_databaseService.VerifierConnexionUtilisateur(Login, Password))
+            if (_databaseService.VerifierConnexionUtilisateur(Email, Password))
             {
+                _databaseService.LoadUserData(Email, Password);
                 await Shell.Current.GoToAsync("///LieuxPage");
             }
             else
