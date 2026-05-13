@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,35 +52,35 @@ public partial class DatabaseService
         return (bool)outputParam.Value;
     }
 
-    public void LoadUserData(string email, string password)
-    {
-        using (var cmd = new SqlCommand("GetUtilisateurParEmailEtMdp", Connexion))
-        {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@email", email);
-            cmd.Parameters.AddWithValue("@password", password);
+    //public void LoadUserData(string email, string password)
+    //{
+    //    using (var cmd = new SqlCommand("GetUtilisateurParEmailEtMdp", Connexion))
+    //    {
+    //        cmd.CommandType = CommandType.StoredProcedure;
+    //        cmd.Parameters.AddWithValue("@email", email);
+    //        cmd.Parameters.AddWithValue("@password", password);
 
-            using (var reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    Session.User = new Utilisateur
-                    {
-                        Util_Id = reader.GetInt32(0),
-                        Util_Login = reader.GetString(1),
-                        Util_Nom = reader.GetString(2),
-                        Util_Prenom = reader.GetString(3),
-                        Util_Email = reader.GetString(4),
-                        Util_Tel = reader.GetString(5),
-                        Util_estGestionnaire = reader.GetBoolean(6)
-                    };
+    //        using (var reader = cmd.ExecuteReader())
+    //        {
+    //            if (reader.Read())
+    //            {
+    //                Session.User = new Utilisateur
+    //                {
+    //                    Util_Id = reader.GetInt32(0),
+    //                    Util_Login = reader.GetString(1),
+    //                    Util_Nom = reader.GetString(2),
+    //                    Util_Prenom = reader.GetString(3),
+    //                    Util_Email = reader.GetString(4),
+    //                    Util_Tel = reader.GetString(5),
+    //                    Util_estGestionnaire = reader.GetBoolean(6)
+    //                };
 
-                    string json = System.Text.Json.JsonSerializer.Serialize(Session.User);
-                    File.WriteAllText(Path.Combine(FileSystem.AppDataDirectory, "utilisateur.json"), json);
-                }
-            }
-        }
-    }
+    //                string json = System.Text.Json.JsonSerializer.Serialize(Session.User);
+    //                File.WriteAllText(Path.Combine(FileSystem.AppDataDirectory, "utilisateur.json"), json);
+    //            }
+    //        }
+    //    }
+    //}
     public List<Lieu> GetLieux()
     {
         string queryString = "PS_S_LIEUX";
@@ -102,6 +103,7 @@ public partial class DatabaseService
                     Lieu_Commentaire = (string?)reader["Lieu_Commentaire"]
                 });
         }
+        reader.Close();
         return lieux;
     }
     public Lieu GetLieu(int id)
@@ -109,10 +111,10 @@ public partial class DatabaseService
         string queryString = "PS_S_LIEU_BY_ID";
         SqlCommand command = new SqlCommand(queryString, Connexion);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.AddWithValue("Id", id);
+        command.Parameters.AddWithValue("Id", id); 
         SqlDataReader reader = command.ExecuteReader();
         reader.Read();
-        return new Lieu
+        var item = new Lieu
         {
             Lieu_Id = (int)reader["Lieu_Id"],
             Lieu_Nom = (string?)reader["Lieu_Nom"],
@@ -123,6 +125,49 @@ public partial class DatabaseService
             Lieu_LienMap = (string?)reader["Lieu_LienMap"],
             Lieu_Commentaire = (string?)reader["Lieu_Commentaire"]
         };
+        reader.Close();
+        return item;
+    }
+
+    public void AddLieu(Lieu lieu)
+    {
+        string queryString = "PS_I_LIEU";
+        SqlCommand command = new SqlCommand(queryString, Connexion);
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@NOM", lieu.Lieu_Nom);
+        command.Parameters.AddWithValue("@ADRESSE", lieu.Lieu_Adresse);
+        command.Parameters.AddWithValue("@VILLE", lieu.Lieu_Ville);
+        command.Parameters.AddWithValue("@CP", lieu.Lieu_CP);
+        command.Parameters.AddWithValue("@PAYS", lieu.Lieu_Pays);
+        command.Parameters.AddWithValue("@LIENMAP", lieu.Lieu_LienMap);
+        command.Parameters.AddWithValue("@COMMENTAIRE", lieu.Lieu_Commentaire);
+        command.ExecuteNonQuery();
+    }
+
+    public void UpdateLieu(Lieu lieu)
+    {
+        string queryString = "PS_U_LIEU";
+        SqlCommand command = new SqlCommand(queryString, Connexion);
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@ID", lieu.Lieu_Id);
+        command.Parameters.AddWithValue("@NOM", lieu.Lieu_Nom);
+        command.Parameters.AddWithValue("@ADRESSE", lieu.Lieu_Adresse);
+        command.Parameters.AddWithValue("@VILLE", lieu.Lieu_Ville);
+        command.Parameters.AddWithValue("@CP", lieu.Lieu_CP);
+        command.Parameters.AddWithValue("@PAYS", lieu.Lieu_Pays);
+        command.Parameters.AddWithValue("@LIENMAP", lieu.Lieu_LienMap);
+        command.Parameters.AddWithValue("@COMMENTAIRE", lieu.Lieu_Commentaire);
+        command.ExecuteNonQuery();
+    }
+
+    public void DeleteLieu(int id)
+    {
+        string queryString = "PS_D_LIEU";
+        SqlCommand command = new SqlCommand(queryString, Connexion);
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("Id", id);
+        command.ExecuteNonQuery();
+        return;
     }
 
     public List<Transport> GetTransports()
@@ -163,6 +208,17 @@ public partial class DatabaseService
         };
     }
 
+    public void DeleteTransport(int id)
+    {
+        string queryString = "PS_D_TRANSPORT";
+        SqlCommand command = new SqlCommand(queryString, Connexion);
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("Id", id);
+        SqlDataReader reader = command.ExecuteReader();
+        reader.Read();
+        return;
+    }
+
     public List<Utilisateur> GetVoyageurs()
     {
         string queryString = "PS_S_VOYAGEURS";
@@ -185,6 +241,37 @@ public partial class DatabaseService
                 });
         }
         return voyageurs;
+    }
+
+    public Utilisateur GetVoyageur(int id)
+    {
+        string queryString = "PS_S_VOYAGEUR_BY_ID";
+        SqlCommand command = new SqlCommand(queryString, Connexion);
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("Id", id);
+        SqlDataReader reader = command.ExecuteReader();
+        reader.Read();
+        return new Utilisateur
+        {
+            Util_Id = (int)reader["Util_Id"],
+            Util_Nom = (string?)reader["Util_Nom"],
+            Util_Prenom = (string?)reader["Util_Prenom"],
+            Util_Login = (string?)reader["Util_Login"],
+            Util_Password = (string?)reader["Util_Password"],
+            Util_Tel = (string?)reader["Util_Tel"],
+            Util_Email = (string?)reader["Util_Email"]
+        };
+    }
+
+    public void DeleteVoyageur(int id)
+    {
+        string queryString = "PS_D_VOYAGEUR";
+        SqlCommand command = new SqlCommand(queryString, Connexion);
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("Id", id);
+        SqlDataReader reader = command.ExecuteReader();
+        reader.Read();
+        return;
     }
 
     public Utilisateur GetUtilisateur(int id)

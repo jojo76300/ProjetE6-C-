@@ -30,6 +30,10 @@
                 Text="Se connecter"
                 Command="{Binding LoginCommand}" />
 
+            <Label
+                Text="Note : Les pages trajet et vue d'ensemble n'existent pas, donc cliquer sur ces pages dans la barre de navigation fera planter l'application."
+                HorizontalTextAlignment="Center" />
+
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

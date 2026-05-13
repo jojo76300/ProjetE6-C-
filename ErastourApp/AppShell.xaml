@@ -23,6 +23,16 @@
         Route="LieuxPage" />
 
     <ShellContent
+        Title="LieuxInsert"
+        ContentTemplate="{DataTemplate pages:LieuxInsert}"
+        Route="LieuxInsert" />
+
+    <ShellContent
+        Title="LieuxUpdate"
+        ContentTemplate="{DataTemplate pages:LieuxUpdate}"
+        Route="LieuxUpdate" />
+
+    <ShellContent
         Title="Voyageurs"
         ContentTemplate="{DataTemplate pages:VoyageursPage}"
         Route="VoyageursPage" />

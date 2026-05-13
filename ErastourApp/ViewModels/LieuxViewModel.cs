@@ -6,9 +6,17 @@ using ErastourApp.Database; // Ajout du using pour DatabaseService
 
 namespace ErastourApp.ViewModels;
 
-public partial class LieuxViewModel : ObservableObject
+public partial class LieuxViewModel : ObservableObject, IQueryAttributable
 {
     private readonly DatabaseService _databaseService; // Ajout du databaseService
+    public int Id { get; set; }
+    public string Nom { get; set; }
+    public string Adresse { get; set; }
+    public string Ville { get; set; }
+    public string CP { get; set; }
+    public string Pays { get; set; }
+    public string LienMap { get; set; }
+    public string Commentaire { get; set; }
 
     //[ObservableProperty]
     //private string currentUserName = Session.User.Util_Login;
@@ -69,17 +77,60 @@ public partial class LieuxViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task AjouterLieu()
+    private async Task NavigateToLieuInsert()
     {
-        // await Shell.Current.GoToAsync(nameof(AddLieuPage));
-        await Application.Current.MainPage.DisplayAlert("Ajouter", "Action d'ajout à implémenter", "OK");
+        await Shell.Current.GoToAsync("///LieuxInsert");
     }
 
     [RelayCommand]
-    private async Task EditLieu(Lieu lieu)
+    private async Task AjouterLieu()
     {
-        if (lieu == null) return;
-        await Application.Current.MainPage.DisplayAlert("Modifier", $"Modifier le lieu {lieu.Lieu_Nom}", "OK");
+        _databaseService.AddLieu(new Lieu
+        {
+            Lieu_Nom = Nom,
+            Lieu_Adresse = Adresse,
+            Lieu_Ville = Ville,
+            Lieu_CP = CP,
+            Lieu_Pays = Pays,
+            Lieu_LienMap = LienMap,
+            Lieu_Commentaire = Commentaire
+        });
+        await Shell.Current.GoToAsync("///LieuxPage");
+        LoadLieux();
+    }
+
+    [RelayCommand]
+    private void NavigateToLieuUpdate(Lieu lieu)
+    {
+        Shell.Current.GoToAsync("///LieuxUpdate", true, new Dictionary<string, object>
+        {
+            { "Lieu", lieu }
+        });
+    }
+
+    [ObservableProperty]
+    private Lieu _lieu;
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        Lieu = (Lieu)query["Lieu"];
+    }
+
+    [RelayCommand]
+    private async Task ModifierLieu()
+    {
+        _databaseService.UpdateLieu(new Lieu
+        {
+            Lieu_Id = Lieu.Lieu_Id,
+            Lieu_Nom = Lieu.Lieu_Nom,
+            Lieu_Adresse = Lieu.Lieu_Adresse,
+            Lieu_Ville = Lieu.Lieu_Ville,
+            Lieu_CP = Lieu.Lieu_CP,
+            Lieu_Pays = Lieu.Lieu_Pays,
+            Lieu_LienMap = Lieu.Lieu_LienMap,
+            Lieu_Commentaire = Lieu.Lieu_Commentaire
+        });
+        await Shell.Current.GoToAsync("///LieuxPage");
+        LoadLieux();
     }
 
     [RelayCommand]
@@ -89,7 +140,8 @@ public partial class LieuxViewModel : ObservableObject
         bool answer = await Application.Current.MainPage.DisplayAlert("Confirmation", $"Voulez-vous vraiment supprimer {lieu.Lieu_Nom} ?", "Oui", "Non");
         if (answer)
         {
-            Lieux.Remove(lieu);
+            _databaseService.DeleteLieu(lieu.Lieu_Id);
+            LoadLieux();
         }
     }
 

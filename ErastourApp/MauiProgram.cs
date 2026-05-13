@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using ErastourApp.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace ErastourApp
 {
@@ -18,6 +19,8 @@ namespace ErastourApp
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddSingleton<LieuxViewModel>();
 
             return builder.Build();
         }

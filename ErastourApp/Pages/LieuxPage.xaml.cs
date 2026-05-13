@@ -4,9 +4,9 @@ namespace ErastourApp.Pages;
 
 public partial class LieuxPage : ContentPage
 {
-	public LieuxPage()
+	public LieuxPage(LieuxViewModel viewModel)
 	{
 		InitializeComponent();
-		BindingContext = new LieuxViewModel();
+		BindingContext = viewModel;
 	}
 }

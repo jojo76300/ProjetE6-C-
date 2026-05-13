@@ -131,7 +131,7 @@
 
                 <Button Grid.Column="1"
                         Text="+ Ajouter un lieu"
-                        Command="{Binding AjouterLieuCommand}"
+                        Command="{Binding NavigateToLieuInsertCommand}"
                         BackgroundColor="#7B3FF2"
                         TextColor="White"
                         CornerRadius="8"
@@ -191,7 +191,7 @@
                                                     Padding="0"
                                                     BackgroundColor="Transparent"
                                                     FontSize="18"
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:LieuxViewModel}}, Path=EditLieuCommand}"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:LieuxViewModel}}, Path=NavigateToLieuUpdateCommand}"
                                                     CommandParameter="{Binding .}" />
 
                                             <Button Text="🗑️" 

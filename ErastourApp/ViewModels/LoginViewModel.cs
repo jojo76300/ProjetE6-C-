@@ -42,7 +42,7 @@ public partial class LoginViewModel : ObservableObject
         {
             if (_databaseService.VerifierConnexionUtilisateur(Email, Password))
             {
-                _databaseService.LoadUserData(Email, Password);
+                //_databaseService.LoadUserData(Email, Password);
                 await Shell.Current.GoToAsync("///LieuxPage");
             }
             else
